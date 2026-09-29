@@ -1,0 +1,17 @@
+.env
+.local/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+build/
+target/
+node_modules/
+*.jsonl
+*.csv
+*.log
+.DS_Store
+.idea/
+*.exe
+*.class
+*.jar

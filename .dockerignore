@@ -1,0 +1,11 @@
+.git
+.local
+.venv
+**/build
+**/lib
+**/__pycache__
+**/node_modules
+*.jsonl
+*.csv
+.env
+docs

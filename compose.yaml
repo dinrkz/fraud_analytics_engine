@@ -1,0 +1,70 @@
+name: opentrace
+services:
+  db:
+    image: postgres:18-bookworm
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-opentrace}
+      POSTGRES_USER: ${POSTGRES_USER:-opentrace}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-opentrace_local}
+    ports:
+      - "127.0.0.1:${DB_PORT:-55432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  analytics:
+    build:
+      context: .
+      dockerfile: analytics_engine/Dockerfile
+    init: true
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: ${POSTGRES_DB:-opentrace}
+      DB_USER: ${POSTGRES_USER:-opentrace}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-opentrace_local}
+      GENERATOR_RATE: ${GENERATOR_RATE:-20}
+      GENERATOR_USERS: ${GENERATOR_USERS:-1000}
+      FRAUD_RATE: ${FRAUD_RATE:-0.08}
+      AUTO_GENERATE: "true"
+      ROOT_PATH: /engine
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+    stop_grace_period: 20s
+
+  api:
+    build: ./backend_api
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: ${POSTGRES_DB:-opentrace}
+      DB_USER: ${POSTGRES_USER:-opentrace}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-opentrace_local}
+      ENGINE_URL: http://analytics:8000
+      API_PORT: 8080
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  dashboard:
+    build: ./frontend_dashboard
+    ports:
+      - "127.0.0.1:${DASHBOARD_PORT:-8088}:80"
+    depends_on:
+      api:
+        condition: service_healthy
+      analytics:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

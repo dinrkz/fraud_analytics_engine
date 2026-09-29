@@ -1,0 +1,12 @@
+cmake_minimum_required(VERSION 3.16)
+project(opentrace_generator VERSION 1.0.0 LANGUAGES CXX)
+
+add_executable(transaction_generator src/main.cpp)
+target_compile_features(transaction_generator PRIVATE cxx_std_17)
+set_target_properties(transaction_generator PROPERTIES CXX_EXTENSIONS OFF)
+if(MSVC)
+    target_compile_options(transaction_generator PRIVATE /W4 /permissive-)
+else()
+    target_compile_options(transaction_generator PRIVATE -Wall -Wextra -Wpedantic)
+endif()
+install(TARGETS transaction_generator RUNTIME DESTINATION bin)

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#142c2a">
+  <meta name="description" content="OpenTrace — live transaction analytics and fraud investigation.">
+  <title>Overview · OpenTrace</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='11' fill='%23142c2a'/%3E%3Cpath d='M9 24V14h10v12h12V16' fill='none' stroke='%2390e5cc' stroke-width='4'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <aside class="sidebar" aria-label="Main navigation">
+    <a class="brand" href="#overview" aria-label="OpenTrace overview"><span class="brand-mark"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 21V10h10v13h12V12"/></svg></span><span>OpenTrace<span class="brand-sub">FRAUD INTELLIGENCE</span></span></a>
+    <div class="workspace"><span class="workspace-icon">O</span><div>Demo workspace<span>Local environment</span></div><span class="workspace-chevron">⌄</span></div>
+    <div class="nav-label">WORKSPACE</div>
+    <nav class="nav-links">
+      <a href="#overview" class="nav-link active" data-view="overview"><span data-icon="overview"></span>Overview</a>
+      <a href="#transactions" class="nav-link" data-view="transactions"><span data-icon="transactions"></span>Transactions</a>
+      <a href="#alerts" class="nav-link" data-view="alerts"><span data-icon="shield"></span>Fraud alerts<span id="nav-alert-count" class="nav-count">—</span></a>
+      <a href="#rules" class="nav-link" data-view="rules"><span data-icon="sliders"></span>Detection rules</a>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="monitor-card"><span class="monitor-orbit"><span data-icon="activity"></span></span><strong>Built for a clearer signal.</strong><p>Follow the money.<br>Understand the risk.</p><div class="monitor-line"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div></div>
+      <a href="/engine/docs" target="_blank" rel="noopener" class="docs-link"><span data-icon="book"></span>API documentation<span data-icon="arrow-up-right"></span></a>
+      <div class="sidebar-footer"><span class="small-logo">OT</span><div>OpenTrace Analytics<span>Development sandbox</span></div><span class="version">v1.0</span></div>
+    </div>
+  </aside>
+  <div class="app-shell">
+    <header class="topbar"><div class="breadcrumb"><span>Workspace</span><span class="slash">/</span><strong id="breadcrumb-title">Overview</strong></div><div class="topbar-right"><span class="sandbox-tag"><span class="dot"></span>SYNTHETIC DATA</span><span class="topbar-divider"></span><span class="avatar" title="Local demo workspace">OT</span></div></header>
+    <main id="main" tabindex="-1">
+      <div class="page-heading"><div><div class="eyebrow">YOUR TRANSACTIONS, IN FOCUS</div><h1 id="page-title">Transaction overview<span class="title-dot">.</span></h1><p id="page-description">A live pulse on your payment network. Every signal, in one place.</p></div><div class="live-state" id="live-state" role="status" aria-live="polite"><span class="status-dot"></span><span id="live-label">Connecting</span></div></div>
+      <div class="toolbar"><div class="period-label"><span data-icon="calendar"></span><select id="range-select" aria-label="Time range"><option value="15">Last 15 minutes</option><option value="60" selected>Last hour</option><option value="360">Last 6 hours</option><option value="1440">Last 24 hours</option></select></div><span class="toolbar-caption" id="updated-at">Waiting for first update</span><div class="toolbar-actions"><button class="icon-button" id="pause-button" title="Pause automatic refresh" aria-label="Pause automatic refresh"><span data-icon="pause"></span></button><button class="icon-button" id="refresh-button" title="Refresh data" aria-label="Refresh data"><span data-icon="refresh"></span></button><button class="button button-white" id="export-button"><span data-icon="download"></span><span>Export CSV</span></button></div></div>
+      <div id="error-banner" class="error-banner" role="alert" hidden><span data-icon="info"></span><span id="error-message"></span><button class="text-button" id="retry-button">Try again</button></div>
+      <section id="view-overview" class="view" aria-label="Overview">
+        <div class="kpi-grid">
+          <article class="kpi-card"><div class="kpi-top"><span>Total volume</span><span class="kpi-icon" data-icon="wallet"></span></div><div class="kpi-value" id="kpi-volume">—</div><div class="kpi-note"><span class="mini-dot teal"></span><span id="kpi-average">Average transaction —</span></div></article>
+          <article class="kpi-card"><div class="kpi-top"><span>Transactions</span><span class="kpi-icon" data-icon="transactions"></span></div><div class="kpi-value" id="kpi-transactions">—</div><div class="kpi-note"><span class="mini-dot teal"></span><span id="kpi-throughput">— transactions / min</span></div></article>
+          <article class="kpi-card risk-card"><div class="kpi-top"><span>Flagged transactions</span><span class="kpi-icon" data-icon="shield"></span></div><div class="kpi-value" id="kpi-flagged">—<span class="kpi-rate" id="kpi-fraud-rate">—</span></div><div class="kpi-note"><span class="mini-dot orange"></span><span id="kpi-open">— alerts awaiting review</span></div></article>
+          <article class="kpi-card"><div class="kpi-top"><span>Active users</span><span class="kpi-icon" data-icon="users"></span></div><div class="kpi-value" id="kpi-users">—</div><div class="kpi-note"><span class="mini-dot teal"></span><span>Unique senders in this period</span></div></article>
+        </div>
+        <div class="charts-grid">
+          <article class="panel activity-panel"><div class="panel-heading"><div><h2>Transaction activity</h2><p>Transaction volume and detected signals over time</p></div><span class="chart-period" id="chart-period">LAST HOUR</span></div><div class="chart-legend"><span><i class="legend-line"></i>Transactions</span><span><i class="legend-dot"></i>Fraud alerts</span><span class="chart-unit">events / minute</span></div><div id="activity-chart" class="activity-chart"><div class="empty-state"><span class="loader"></span><p>Connecting to your data stream…</p></div></div></article>
+          <article class="panel countries-panel"><div class="panel-heading"><div><h2>Across the network</h2><p>Transactions by origin</p></div><span class="panel-icon" data-icon="globe"></span></div><div class="country-summary"><span id="country-count">—</span><div>countries<span>in the selected period</span></div><span class="country-globe" data-icon="globe"></span></div><div id="country-list" class="country-list"><div class="empty-state compact">Loading countries…</div></div></article>
+        </div>
+        <article class="panel alerts-panel"><div class="panel-heading"><div class="heading-with-count"><h2>Latest fraud signals</h2><span class="count-chip" id="recent-alert-count">—</span></div><a class="text-link" href="#alerts">View all alerts<span data-icon="arrow-right"></span></a></div><div id="recent-alerts-table" class="table-wrap"><div class="empty-state">Loading alerts…</div></div><div class="panel-footnote"><span data-icon="info"></span>Signals are generated by transparent, rule-based detection. Review an alert to investigate.</div></article>
+        <article class="pipeline-panel"><div class="pipeline-heading"><span class="pipeline-icon" data-icon="activity"></span><div><h2>Your pipeline, at a glance</h2><p id="pipeline-caption">Checking service health…</p></div></div><div id="pipeline-stages" class="pipeline-stages"></div><span class="pipeline-label">LOCAL STACK</span></article>
+      </section>
+      <section id="view-transactions" class="view" aria-label="Transactions" hidden><article class="panel list-panel"><div class="list-toolbar"><label class="search-box"><span data-icon="search"></span><input id="transaction-search" type="search" placeholder="Search event, sender or merchant…" autocomplete="off" aria-label="Search transactions"></label><label class="filter-select">Risk<select id="risk-filter"><option value="all">All transactions</option><option value="flagged">Flagged only</option></select></label></div><div id="transactions-table" class="table-wrap"><div class="empty-state">Loading transactions…</div></div><div id="transactions-pagination" class="pagination"></div></article></section>
+      <section id="view-alerts" class="view" aria-label="Fraud alerts" hidden><article class="panel list-panel"><div class="list-toolbar"><label class="search-box"><span data-icon="search"></span><input id="alert-search" type="search" placeholder="Search event or detection rule…" autocomplete="off" aria-label="Search fraud alerts"></label><label class="filter-select">Status<select id="alert-filter"><option value="all">All alerts</option><option value="new">Needs review</option><option value="reviewed">Reviewed</option><option value="dismissed">Dismissed</option></select></label></div><div id="alerts-table" class="table-wrap"><div class="empty-state">Loading alerts…</div></div><div id="alerts-pagination" class="pagination"></div></article></section>
+      <section id="view-rules" class="view" aria-label="Detection rules" hidden><div class="rules-notice"><span data-icon="info"></span><div><strong>Transparent detection. Explainable decisions.</strong><p>Every alert links back to a rule. Rule configuration is managed by the analytics service.</p></div></div><div id="rules-grid" class="rules-grid"><div class="empty-state">Loading detection rules…</div></div></section>
+      <footer class="page-footer"><span>OpenTrace <span class="footer-separator">/</span> See the signal. Trace the risk.</span><span>All times shown in your local timezone</span></footer>
+    </main>
+  </div>
+  <dialog id="alert-dialog" aria-labelledby="dialog-title"><div class="dialog-header"><div><div class="eyebrow">ALERT INVESTIGATION</div><h2 id="dialog-title">Fraud signal</h2></div><button class="icon-button" id="close-dialog" aria-label="Close alert details"><span data-icon="close"></span></button></div><div id="dialog-content"></div><div class="dialog-error" id="dialog-error" role="alert" hidden></div><div class="dialog-actions" id="dialog-actions"></div></dialog>
+  <div class="toast" id="toast" role="status" hidden></div>
+</body>
+</html>
