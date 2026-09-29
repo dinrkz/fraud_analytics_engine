@@ -217,6 +217,5 @@ tests/                  Rule tests and API smoke test
 compose.yaml            Four local services
 ```
 
-Для изучения за четыре дня: **день 1** — контракт события, схема и генератор; **день 2** — Welford, event time, идемпотентная запись и Java SQL; **день 3** — поток данных в UI, расследование и ошибки; **день 4** — контейнеризация, проверки, измерения и демонстрация.
 
 Репозиторий: [dinrkz/fraud_analytics_engine](https://github.com/dinrkz/fraud_analytics_engine). Локальный исходный код не требует подключения GitHub для запуска после скачивания зависимостей и сборки образов.
